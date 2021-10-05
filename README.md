@@ -1,15 +1,13 @@
 # Backend Demo
-## Setup Environment
+## Building docker image
 ```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
+docker build -t demo .
 ```
 
-## Running Local API
+## Running API
 ```bash
-uvicorn main:app --reload
+docker run -d -p 80:80 demo
 ```
 
-The local API can be reached at http://127.0.0.1:8000 and the docs are at
-http://127.0.0.1:8000/docs
+For local testing, API can be reached at http://127.0.0.1:8000 and the docs are
+at http://127.0.0.1:8000/docs
