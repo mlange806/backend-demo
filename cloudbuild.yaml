@@ -1,0 +1,13 @@
+steps:
+# Build the container image
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/peaceful-berm-328103/backend-demo', '.']
+# Push the container image to Container Registry
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/peaceful-berm-328103/backend-demo']
+# Deploy container image to Cloud Run
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args: ['run', 'deploy', 'backend-demo', '--image', 'gcr.io/peaceful-berm-328103/backend-demo', '--region', 'us-central1']
+images:
+- gcr.io/peaceful-berm-328103/backend-demo
