@@ -9,4 +9,4 @@ async def root():
 
 @app.get("/newfeature")
 async def new_feature():
-    return {"wow!": "neat"}
+    return {"wow!": "cool2"}
