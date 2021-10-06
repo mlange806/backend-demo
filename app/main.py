@@ -12,6 +12,12 @@ db = sqlalchemy.create_engine(
         host=os.environ["DB_HOST"],
         port=os.environ["DB_PORT"],
         database=os.environ["DB_NAME"],
+        query={
+            "unix_socket": "{}/{}".format(
+                os.environ.get("DB_SOCKET_DIR", "/cloudsql"),
+                os.environ["CLOUD_SQL_CONNECTION_NAME"]
+            )
+        }
     )
 )
 
