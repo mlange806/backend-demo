@@ -5,6 +5,8 @@ docker build -t demo .
 ```
 
 ## Running API
+TODO: Consider explaing how to connect to a local database for testing
+
 ```bash
 docker run -d -p 80:80 demo
 ```
