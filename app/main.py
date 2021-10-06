@@ -1,6 +1,6 @@
 import os
-from fastapi import FastAPI
 import sqlalchemy
+from fastapi import FastAPI
 
 app = FastAPI()
 
@@ -14,6 +14,7 @@ db = sqlalchemy.create_engine(
         database=os.environ["DB_NAME"],
     )
 )
+
 
 @app.get("/")
 async def root():
