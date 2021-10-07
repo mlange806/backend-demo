@@ -53,4 +53,4 @@ async def root(current_user: User = Depends(get_current_active_user)):
 
     # Return a slice for now. We are going to implement searching and pagination
     # soon
-    return shows[0:5]
+    return ['wrong']
