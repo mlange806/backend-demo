@@ -1,30 +1,11 @@
-import os
-import sqlalchemy
+import app.crud as crud
 from app.security import *
 from datetime import timedelta
-from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-load_dotenv()
 app = FastAPI()
 
-db = sqlalchemy.create_engine(
-    sqlalchemy.engine.url.URL.create(
-        drivername="mysql+pymysql",
-        username=os.environ["DB_USER"],
-        password=os.environ["DB_PASS"],
-        host=os.environ["DB_HOST"],
-        port=os.environ["DB_PORT"],
-        database=os.environ["DB_NAME"],
-        query={
-            "unix_socket": "{}/{}".format(
-                os.environ.get("DB_SOCKET_DIR", "/cloudsql"),
-                os.environ["CLOUD_SQL_CONNECTION_NAME"]
-            )
-        }
-    )
-)
 
 @app.post("/token", response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -47,10 +28,6 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 
 @app.get("/")
 async def root(current_user: User = Depends(get_current_active_user)):
-    shows = []
-    with db.connect() as conn:
-        shows = conn.execute("SELECT * FROM SHOWS").fetchall()
-
     # Return a slice for now. We are going to implement searching and pagination
     # soon
-    return shows[0:5]
+    return crud.get_shows()[0:5]
