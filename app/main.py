@@ -2,9 +2,11 @@ import os
 import sqlalchemy
 from app.security import *
 from datetime import timedelta
+from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
+load_dotenv()
 app = FastAPI()
 
 db = sqlalchemy.create_engine(
@@ -23,7 +25,6 @@ db = sqlalchemy.create_engine(
         }
     )
 )
-
 
 @app.post("/token", response_model=Token)
 async def login(form_data: OAuth2PasswordRequestForm = Depends()):
@@ -49,4 +50,7 @@ async def root(current_user: User = Depends(get_current_active_user)):
     shows = []
     with db.connect() as conn:
         shows = conn.execute("SELECT * FROM SHOWS").fetchall()
-    return shows
+
+    # Return a slice for now. We are going to implement searching and pagination
+    # soon
+    return shows[0:5]

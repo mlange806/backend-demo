@@ -1,5 +1,6 @@
 import os
 from datetime import datetime, timedelta
+from dotenv import load_dotenv
 from typing import Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -8,6 +9,7 @@ from passlib.context import CryptContext
 from pydantic import BaseModel
 
 # Based on https://fastapi.tiangolo.com/tutorial/security/oauth2-jwt
+load_dotenv()
 SECRET_KEY = os.environ['JWT_SECRET']
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
@@ -17,8 +19,8 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 users = [
     {
-        "username": os.environ['USERNAME'],
-        "hashed_password": os.environ['PASSWORD'],
+        "username": os.environ['API_USERNAME'],
+        "hashed_password": os.environ['API_PASSWORD'],
         "disabled": False,
     }
 ]
