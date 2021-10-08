@@ -50,3 +50,20 @@ async def get_summary(current_user: User = Depends(get_current_active_user)):
         "countries": sorted(list(countries)),
         "categories": sorted(list(categories))
     }
+
+
+@app.get("/shows")
+async def get_shows(start: int=0, stop: int=10, search: str="", filter: str="",
+                    descending: bool=False):
+    shows = crud.get_shows()
+    shows.sort(reverse=descending, key=lambda show: show['show_id'])
+
+    r = []
+    for show in shows:
+        if [v for v in show.values() if search in v]:
+            if not filter:
+                r.append(show)
+            elif not [v for v in show.values() if filter in v]:
+                r.append(show)
+
+    return r[start:stop]

@@ -20,5 +20,5 @@ db = sqlalchemy.create_engine(
 
 def get_shows():
     with db.connect() as conn:
-        shows = conn.execute("SELECT * FROM SHOWS").fetchall()
+        shows = conn.execute("SELECT * FROM SHOWS ").fetchall()
     return shows

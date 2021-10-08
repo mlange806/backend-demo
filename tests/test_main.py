@@ -1,3 +1,4 @@
+import copy
 import app.crud as crud
 import app.main
 import pytest
@@ -49,7 +50,7 @@ DATA = [
 ]
 
 @pytest.mark.asyncio
-async def test_root():
+async def test_get_summary():
     crud.get_shows = MagicMock(return_value=DATA)
 
     r = await app.main.get_summary()
@@ -67,3 +68,31 @@ async def test_root():
             "TV Mysteries"
         ]
     }
+
+@pytest.mark.asyncio
+async def test_get_shows():
+    crud.get_shows = MagicMock(return_value=copy.deepcopy(DATA))
+
+    r = await app.main.get_shows(0, 3)
+    assert r == DATA[0:3]
+
+    r = await app.main.get_shows(0, 2)
+    assert r == DATA[0:2]
+
+    r = await app.main.get_shows(1, 3)
+    assert r == DATA[1:3]
+
+    r = await app.main.get_shows(0, 3, search="Dick Johnson Is Dead")
+    assert r == DATA[0:1]
+
+    r = await app.main.get_shows(0, 3, search="TV Show")
+    assert r == DATA[1:3]
+
+    r = await app.main.get_shows(0, 3, descending=True)
+    assert r == DATA[::-1]
+
+    r = await app.main.get_shows(0, 3, filter="Dick Johnson Is Dead")
+    assert r == DATA[1:3]
+
+    r = await app.main.get_shows(1, 3, search="September", filter="Ganglands")
+    assert r == DATA[1:2]
