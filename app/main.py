@@ -30,6 +30,7 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
 @app.get("/summary")
 async def get_summary(current_user: User = Depends(get_current_active_user)):
     shows = crud.get_shows()
+
     type_count = Counter(s['type'] for s in shows)
     year_count = Counter(int(s["release_year"]) for s in shows)
 

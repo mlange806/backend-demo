@@ -1,7 +1,6 @@
 import app.crud as crud
 import app.main
 import pytest
-from helpers import MockDb
 from unittest.mock import MagicMock
 
 DATA = [
@@ -51,7 +50,7 @@ DATA = [
 
 @pytest.mark.asyncio
 async def test_root():
-    crud.db = MockDb(DATA)
+    crud.get_shows = MagicMock(return_value=DATA)
 
     r = await app.main.get_summary()
     assert r == {
