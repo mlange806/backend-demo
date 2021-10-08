@@ -53,5 +53,18 @@ DATA = [
 async def test_root():
     crud.db = MockDb(DATA)
 
-    r = await app.main.root()
-    assert r == DATA
+    r = await app.main.get_summary()
+    assert r == {
+        "total": 3,
+        "movie_count": 1,
+        "tv_count": 2,
+        "most_active_year": 2021,
+        "countries": ["South Africa", "United States"],
+        "categories": [
+            "Crime TV Shows",
+            "Documentaries",
+            "International TV Shows",
+            "TV Dramas",
+            "TV Mysteries"
+        ]
+    }
