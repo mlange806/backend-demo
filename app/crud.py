@@ -49,3 +49,16 @@ def update_show(show_id, key, value):
             where(shows_table.c.show_id == show_id).\
             values({key: value})
         conn.execute(stmt)
+
+
+def create_show(show_dict):
+    with db.connect() as conn:
+        stmt = shows_table.insert().values(show_dict)
+        conn.execute(stmt)
+
+
+def delete_show(show_id):
+    with db.connect() as conn:
+        stmt = shows_table.delete().\
+            where(shows_table.c.show_id == show_id)
+        conn.execute(stmt)

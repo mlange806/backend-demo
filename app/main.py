@@ -57,7 +57,10 @@ async def get_summary(current_user: User = Depends(get_current_active_user)):
 async def get_shows(start: int=0, stop: int=10, search: str="", filter: str="",
                     descending: bool=False):
     shows = crud.get_shows()
-    shows.sort(reverse=descending, key=lambda show: show['show_id'])
+    shows.sort(
+        reverse=descending,
+        key=lambda show: int(show['show_id'].split('s')[1])
+    )
 
     r = []
     for show in shows:
@@ -72,7 +75,19 @@ async def get_shows(start: int=0, stop: int=10, search: str="", filter: str="",
 
 @app.put("/show/{show_id}")
 async def update_show(show_id: str, show_update: ShowUpdate,
-                   current_user: User = Depends(get_current_active_user)):
+                      current_user: User = Depends(get_current_active_user)):
     for key, value in show_update:
         if value:
             crud.update_show(show_id, key, value)
+
+
+@app.post("/show")
+async def create_show(show_create: ShowCreate,
+                      current_user: User = Depends(get_current_active_user)):
+    crud.create_show(dict(show_create))
+
+
+@app.delete("/show/{show_id}")
+async def delete_show(show_id: str,
+                      current_user: User = Depends(get_current_active_user)):
+    crud.delete_show(show_id)

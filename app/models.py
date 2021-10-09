@@ -2,7 +2,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class ShowBase(BaseModel):
+class ShowUpdate(BaseModel):
     type: Optional[str] = None
     title: Optional[str] = None
     director: Optional[str] = None
@@ -15,5 +15,17 @@ class ShowBase(BaseModel):
     listed_in: Optional[str] = None
     description: Optional[str] = None
 
-class ShowUpdate(ShowBase):
-    pass
+
+class ShowCreate(BaseModel):
+    show_id: str
+    type: str
+    title: str
+    director: str
+    cast: str
+    country: str
+    date_added: str
+    release_year: str
+    rating: str
+    duration: str
+    listed_in: str
+    description: str
