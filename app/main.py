@@ -1,4 +1,5 @@
 import app.crud as crud
+from app.models import *
 from app.security import *
 from collections import Counter
 from datetime import timedelta
@@ -67,3 +68,11 @@ async def get_shows(start: int=0, stop: int=10, search: str="", filter: str="",
                 r.append(show)
 
     return r[start:stop]
+
+
+@app.put("/show/{show_id}")
+async def update_show(show_id: str, show_update: ShowUpdate,
+                   current_user: User = Depends(get_current_active_user)):
+    for key, value in show_update:
+        if value:
+            crud.update_show(show_id, key, value)

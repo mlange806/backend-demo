@@ -1,5 +1,22 @@
 import sqlalchemy
 from app.config import *
+from sqlalchemy import Table, Column, Integer, String, MetaData, ForeignKey
+
+metadata_obj = MetaData()
+shows_table = Table('SHOWS', metadata_obj,
+    Column('show_id', String, primary_key=True),
+    Column('type', String),
+    Column('title', String),
+    Column('director', String),
+    Column('cast', String),
+    Column('country', String),
+    Column('date_added', String),
+    Column('release_year', String),
+    Column('rating', String),
+    Column('duration', String),
+    Column('listed_in', String),
+    Column('description', String)
+)
 
 db = sqlalchemy.create_engine(
     sqlalchemy.engine.url.URL.create(
@@ -18,7 +35,17 @@ db = sqlalchemy.create_engine(
     )
 )
 
+
 def get_shows():
     with db.connect() as conn:
-        shows = conn.execute("SELECT * FROM SHOWS ").fetchall()
+        stmt = shows_table.select()
+        shows = conn.execute(stmt).fetchall()
     return shows
+
+
+def update_show(show_id, key, value):
+    with db.connect() as conn:
+        stmt = shows_table.update().\
+            where(shows_table.c.show_id == show_id).\
+            values({key: value})
+        conn.execute(stmt)

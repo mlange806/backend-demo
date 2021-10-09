@@ -96,3 +96,27 @@ async def test_get_shows():
 
     r = await app.main.get_shows(1, 3, search="September", filter="Ganglands")
     assert r == DATA[1:2]
+
+@pytest.mark.asyncio
+async def test_update_show():
+    data = copy.deepcopy(DATA)
+    def update_show(show_id, key, value):
+        for (i, show) in enumerate(data):
+            if show['show_id'] == show_id:
+                data[i][key] = value
+
+    crud.get_shows = MagicMock(return_value=data)
+    crud.update_show = MagicMock(side_effect=update_show)
+
+    r = await app.main.update_show('s1', [("title", "My Really Cool Edit")])
+    assert r == None
+    assert data[0]['title'] == "My Really Cool Edit"
+
+    show_update = [
+        ("director", "Mark"),
+        ("country", "Canada")
+    ]
+    r = await app.main.update_show('s1', show_update)
+    assert r == None
+    assert data[0]['director'] == "Mark"
+    assert data[0]['country'] == "Canada"
